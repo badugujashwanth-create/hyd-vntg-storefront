@@ -2,8 +2,8 @@ import { ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
 const initialCredentials = {
-  email: 'admin@gmail.com',
-  password: '123456',
+  email: '',
+  password: '',
 };
 
 export default function AdminLogin({ onSubmit, submitting, error }) {

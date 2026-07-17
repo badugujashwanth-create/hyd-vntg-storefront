@@ -3,8 +3,8 @@ import { hasSupabase, supabase } from './supabase';
 
 const PRODUCTS_KEY = 'hyd-vntg-products';
 const SESSION_KEY = 'hyd-vntg-admin-session';
-const DEFAULT_ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || 'admin@hydvntg.in';
-const DEFAULT_ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'hydvntg123';
+const LOCAL_ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL?.trim();
+const LOCAL_ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 function hasWindow() {
   return typeof window !== 'undefined';
@@ -173,7 +173,11 @@ export async function loginAdmin({ email, password }) {
     };
   }
 
-  if (email !== DEFAULT_ADMIN_EMAIL || password !== DEFAULT_ADMIN_PASSWORD) {
+  if (!LOCAL_ADMIN_EMAIL || !LOCAL_ADMIN_PASSWORD) {
+    throw new Error('Local admin access is disabled. Configure Supabase or explicit demo credentials.');
+  }
+
+  if (email !== LOCAL_ADMIN_EMAIL || password !== LOCAL_ADMIN_PASSWORD) {
     throw new Error('Invalid admin credentials.');
   }
 
