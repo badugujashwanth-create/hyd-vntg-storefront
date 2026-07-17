@@ -1,4 +1,4 @@
-# HYD VNTG Storefront (Duplicate) storyboard
+# HYD VNTG Storefront storyboard
 
 | Time | Frame | Evidence to show |
 |---:|---|---|

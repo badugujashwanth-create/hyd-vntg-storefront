@@ -1,85 +1,72 @@
-# HYD VNTG
+# HYD VNTG Storefront
 
-> **Status: Duplicate / Archive Candidate** — The storefront build passes, but this audited commit is content-identical to `thrifty_vintagegarag` and should not be featured separately.
+> **Status: MVP / Public Canonical Candidate** — The storefront build passes. This public repository is the recommended recruiter-facing canonical copy after its release PR and rename are complete.
 
-Dark, premium men's thrift and streetwear storefront for Hyderabad with:
+[![Watch the HYD VNTG demo](docs/demo/demo-thumbnail.png)](docs/demo/demo.webm)
 
-- public product browsing
-- WhatsApp-first ordering flow
-- admin login and inventory dashboard
-- local-first fallback with optional Supabase backend
+HYD VNTG is a responsive men's thrift and streetwear storefront for Hyderabad with public product browsing, a WhatsApp handoff, local catalog fallback, and optional Supabase-backed inventory administration.
+
+## What works today
+
+- Responsive catalog and collection browsing
+- Product detail and order-handoff workflow
+- Local browser inventory fallback for demonstration
+- Optional Supabase product and authentication integration
+- Static Vercel/Netlify deployment configuration
+
+The video demonstrates browsing and the handoff form without sending a real message. Admin access is disabled unless Supabase or explicit local demo credentials are configured.
 
 ## Stack
 
-- React
-- Vite
+- React 19 and Vite
 - Tailwind CSS
-- Supabase JS
+- Supabase JS (optional)
+- Local storage fallback
 
 ## Run locally
 
 ```bash
-npm install
+git clone https://github.com/badugujashwanth-create/hyd-vntg-storefront.git
+cd hyd-vntg-storefront
+npm ci
 npm run dev
 ```
 
-## Build
+## Build and verification
 
 ```bash
 npm run build
+npm audit --omit=dev
 ```
+
+See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for the last verified environment and [docs/demo/DEMO_SCRIPT.md](docs/demo/DEMO_SCRIPT.md) for the demonstration boundary.
 
 ## Environment
 
-Copy `.env.example` to `.env` and update values as needed.
+Copy `.env.example` to `.env` and provide only the integrations you intend to use.
 
-Required for WhatsApp:
+| Variable | Purpose |
+|---|---|
+| `VITE_WHATSAPP_NUMBER` | Order-handoff destination; visible in the browser bundle |
+| `VITE_SUPABASE_URL` | Optional Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Optional public Supabase client key; database rules remain essential |
+| `VITE_ADMIN_EMAIL` | Optional local-demo admin identity when Supabase is absent |
+| `VITE_ADMIN_PASSWORD` | Optional local-demo password; never reuse a real password |
 
-- `VITE_WHATSAPP_NUMBER`
+No local admin credential is built into the application. Without Supabase or both explicit demo-admin values, the admin login fails closed.
 
-Optional for live backend auth + product sync:
+## Deployment and security boundaries
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+- Vercel and Netlify SPA rewrites are included.
+- The public catalog can run without a backend.
+- Supabase policies in `supabase/schema.sql` must be reviewed before connecting real inventory.
+- `VITE_*` values are public browser configuration; never place a service-role key or private secret in them.
+- WhatsApp handoff leaves the application and must be reviewed before using a real business number.
 
-Local fallback admin credentials:
+## Repository relationship
 
-- email: `admin@hydvntg.in`
-- password: `hydvntg123`
-
-## Deploy
-
-This repo is prepared for static deployment.
-
-- Vercel: `vercel.json` adds SPA rewrites
-- Netlify: `netlify.toml` and `public/_redirects` add SPA rewrites
-
-Build command:
-
-```bash
-npm run build
-```
-
-Output directory:
-
-```bash
-dist
-```
-
-## Supabase setup
-
-Run the SQL in `supabase/schema.sql` to create the `products` table and policies.
-
-## Related repository
-
-The audited commit is content-identical to [thrifty_vintagegarag](https://github.com/badugujashwanth-create/thrifty_vintagegarag). This public copy is an archive candidate after the owner confirms which repository should remain canonical.
-
-See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) and [docs/demo/DEMO_SCRIPT.md](docs/demo/DEMO_SCRIPT.md).
-
-The two repositories represent the same product. Watch the
-[canonical storefront demo](https://github.com/badugujashwanth-create/thrifty_vintagegarag/blob/portfolio-polish/docs/demo/demo.webm)
-instead of maintaining a duplicate recording.
+The application source began as a content-identical public/private duplicate. This public copy is being promoted as the recruiter-facing canonical repository so portfolio links never require authentication. The private duplicate is not deleted or archived by this release.
 
 ## License status
 
-No license file is currently present. All rights remain with the copyright holder unless a license is added manually.
+No license file is currently present. All rights remain with the copyright holder unless an ownership-informed license is added manually.
