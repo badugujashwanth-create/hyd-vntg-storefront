@@ -2,7 +2,9 @@
 
 > **Status: MVP / Public Canonical Candidate** — The storefront build passes. This public repository is the recommended recruiter-facing canonical copy after its release PR and rename are complete.
 
-[![Watch the HYD VNTG demo](docs/demo/demo-thumbnail.png)](docs/demo/demo.webm)
+[![Watch the HYD VNTG demo](docs/demo/demo-thumbnail.png)](https://jashwanth-portfolio-ten.vercel.app/work/hyd-vntg-storefront/)
+
+[Open MP4](https://jashwanth-portfolio-ten.vercel.app/media/hyd-vntg/demo.mp4) · [Download WebM](https://jashwanth-portfolio-ten.vercel.app/media/hyd-vntg/demo.webm) · [Captions](https://jashwanth-portfolio-ten.vercel.app/media/hyd-vntg/demo-captions.vtt)
 
 HYD VNTG is a responsive men's thrift and streetwear storefront for Hyderabad with public product browsing, a WhatsApp handoff, local catalog fallback, and optional Supabase-backed inventory administration.
 
