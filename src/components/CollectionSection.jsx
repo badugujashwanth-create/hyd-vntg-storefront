@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MessageCircleMore } from 'lucide-react';
 import Reveal from './Reveal';
 import ProductCard from './ProductCard';
-import { buildWhatsAppLink } from '../lib/whatsapp';
+import WhatsAppAction from './WhatsAppAction';
 
 const cardOffsets = ['', 'md:translate-y-8', '', 'xl:-translate-y-6', 'xl:translate-y-6', '', 'md:-translate-y-4', ''];
 const imageRatios = [
@@ -39,7 +39,7 @@ export default function CollectionSection({ products, whatsappNumber, onOrderPro
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <span className="border border-white/10 bg-transparent px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-stone">
-              Only 1 piece available per drop
+              Demo: one synthetic unit per item
             </span>
             <span className="border border-white/10 bg-transparent px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-stone">
               Hyderabad Based
@@ -69,18 +69,15 @@ export default function CollectionSection({ products, whatsappNumber, onOrderPro
             })}
           </div>
 
-          <a
-            href={buildWhatsAppLink(
-              whatsappNumber,
-              'Hi, I want to browse the current HYD VNTG collection.',
-            )}
-            target="_blank"
-            rel="noreferrer"
+          <WhatsAppAction
+            whatsappNumber={whatsappNumber}
+            message="Hi, I want to browse the current HYD VNTG collection."
             className="inline-flex items-center gap-2 border border-[#25D366]/35 bg-transparent px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#8fe6af] transition hover:-translate-y-0.5 hover:bg-[#25D366]/[0.05]"
+            disabledChildren={<><MessageCircleMore size={15} strokeWidth={1.7} /> WhatsApp not configured</>}
           >
             <MessageCircleMore size={15} strokeWidth={1.7} />
             Order via WhatsApp
-          </a>
+          </WhatsAppAction>
         </div>
       </Reveal>
 

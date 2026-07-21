@@ -6,7 +6,7 @@ const initialCredentials = {
   password: '',
 };
 
-export default function AdminLogin({ onSubmit, submitting, error }) {
+export default function AdminLogin({ onSubmit, submitting, error, accessMode }) {
   const [credentials, setCredentials] = useState(initialCredentials);
 
   function updateField(field, value) {
@@ -34,8 +34,7 @@ export default function AdminLogin({ onSubmit, submitting, error }) {
                 Manage stock without leaving the brand.
               </h1>
               <p className="mt-6 max-w-xl text-base leading-8 text-stone">
-                The customer site stays public and fast. Inventory control, stock switches, and
-                product updates stay behind admin login.
+                This dashboard is a configuration-gated prototype. Supabase authorization and row-level policies—not this client screen—must protect any live inventory.
               </p>
             </div>
 
@@ -65,7 +64,13 @@ export default function AdminLogin({ onSubmit, submitting, error }) {
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone">
                 HYD VNTG Admin
               </p>
-              <p className="mt-2 text-sm text-stone">Secure access for dashboard controls.</p>
+              <p className="mt-2 text-sm text-stone">
+                {accessMode === 'supabase'
+                  ? 'Supabase authentication configured; external policies remain authoritative.'
+                  : accessMode === 'local-demo'
+                    ? 'Explicit browser-only demo credentials are configured for this build.'
+                    : 'Admin access is disabled until Supabase or explicit local demo credentials are configured.'}
+              </p>
             </div>
           </div>
 

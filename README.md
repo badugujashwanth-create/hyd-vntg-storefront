@@ -1,74 +1,70 @@
 # HYD VNTG Storefront
 
-> **Status: MVP / Public Canonical Candidate** — The storefront build passes. This public repository is the recommended recruiter-facing canonical copy after its release PR and rename are complete.
+> **Release candidate:** a responsive storefront prototype with deterministic synthetic inventory, a local order-message preview, and fail-closed external/admin boundaries.
 
-[![Watch the HYD VNTG demo](docs/demo/demo-thumbnail.png)](https://jashwanth-portfolio-ten.vercel.app/work/hyd-vntg-storefront/)
+[![Watch the 3:03 narrated HYD VNTG walkthrough](docs/demo/demo-thumbnail.png)](docs/demo/demo.mp4)
 
-[Open MP4](https://jashwanth-portfolio-ten.vercel.app/media/hyd-vntg/demo.mp4) · [Download WebM](https://jashwanth-portfolio-ten.vercel.app/media/hyd-vntg/demo.webm) · [Captions](https://jashwanth-portfolio-ten.vercel.app/media/hyd-vntg/demo-captions.vtt)
+[Play MP4](docs/demo/demo.mp4) · [Download WebM](docs/demo/demo.webm) · [Captions](docs/demo/demo-captions.vtt) · [Portfolio case study](https://jashwanth-portfolio-ten.vercel.app/work/hyd-vntg-storefront/)
 
-HYD VNTG is a responsive men's thrift and streetwear storefront for Hyderabad with public product browsing, a WhatsApp handoff, local catalog fallback, and optional Supabase-backed inventory administration.
+The 3:03 narrated walkthrough is a real browser recording of the verified workflow. It shows the synthetic catalog, responsive filtering, the local order-message preview with zero outbound popups, the fail-closed admin boundary, and the product limitations.
 
-## What works today
+HYD VNTG demonstrates one complete public workflow without pretending to be a production commerce system: browse a synthetic catalog, filter by category, inspect stock, select a product and size, enter synthetic delivery details, and generate a local order-message preview. Nothing leaves the browser unless a real WhatsApp destination is explicitly configured.
 
-- Responsive catalog and collection browsing
-- Product detail and order-handoff workflow
-- Local browser inventory fallback for demonstration
-- Optional Supabase product and authentication integration
-- Static Vercel/Netlify deployment configuration
+## Primary workflow
 
-The video demonstrates browsing and the handoff form without sending a real message. Admin access is disabled unless Supabase or explicit local demo credentials are configured.
+1. Browse the synthetic single-unit catalog.
+2. Filter a category and inspect the item, price, and stock state.
+3. Open the product dialog, select a size, and enter synthetic demo details.
+4. Generate the **Local message preview — not sent** result.
+5. Close the dialog or, only in an explicitly configured build, continue to WhatsApp.
 
-## Stack
+The catalog photography is stored in `public/products` so the core demo does not depend on an image CDN at runtime. The images come from the Unsplash photo URLs preserved in repository history; product names and inventory are synthetic fixtures, not offers for sale.
 
-- React 19 and Vite
-- Tailwind CSS
-- Supabase JS (optional)
-- Local storage fallback
+## Honest boundaries
 
-## Run locally
+- There is no payment, checkout, reservation, shipping, fulfillment, customer account, or production-order backend.
+- WhatsApp and Instagram are visibly unavailable by default; no placeholder account or phone number is opened.
+- Local admin mode is a browser-only demo. Its optional credentials are public build configuration and cannot secure real data.
+- Supabase mode accepts only a server-assigned `app_metadata.role = admin`; example row-level policies enforce the same role for mutations.
+- Supabase schema deployment, WhatsApp ownership, inventory truth, and real commerce operations are not claimed.
+- The private `thrifty_vintagegarag` duplicate is unchanged and is not a second portfolio project.
+
+## Run
+
+Requires Node.js 22 and npm.
 
 ```bash
-git clone https://github.com/badugujashwanth-create/hyd-vntg-storefront.git
-cd hyd-vntg-storefront
 npm ci
 npm run dev
 ```
 
-## Build and verification
+The default build needs no environment variables and keeps every external action disabled.
+
+## Verify
 
 ```bash
+npm test
 npm run build
-npm audit --omit=dev
+npm run test:e2e
+npm audit --audit-level=low
 ```
 
-See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for the last verified environment and [docs/demo/DEMO_SCRIPT.md](docs/demo/DEMO_SCRIPT.md) for the demonstration boundary.
+Unit tests cover handoff validation, order-message construction, local catalog transitions, corrupt storage recovery, admin sessions, and Supabase policy boundaries. Playwright covers the desktop order preview, fail-closed admin, and mobile navigation/overflow.
 
-## Environment
+## Optional configuration
 
-Copy `.env.example` to `.env` and provide only the integrations you intend to use.
+Copy `.env.example` to `.env` only for a boundary you intend to exercise.
 
-| Variable | Purpose |
+| Variable | Purpose and boundary |
 |---|---|
-| `VITE_WHATSAPP_NUMBER` | Order-handoff destination; visible in the browser bundle |
-| `VITE_SUPABASE_URL` | Optional Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY` | Optional public Supabase client key; database rules remain essential |
-| `VITE_ADMIN_EMAIL` | Optional local-demo admin identity when Supabase is absent |
-| `VITE_ADMIN_PASSWORD` | Optional local-demo password; never reuse a real password |
+| `VITE_WHATSAPP_NUMBER` | Optional public international-digits destination; empty keeps handoff disabled |
+| `VITE_SUPABASE_URL` | Optional public Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Optional public client key; never a service-role secret |
+| `VITE_ADMIN_EMAIL` | Browser-visible local-demo identity used only when Supabase is absent |
+| `VITE_ADMIN_PASSWORD` | Browser-visible local-demo password; synthetic values only |
 
-No local admin credential is built into the application. Without Supabase or both explicit demo-admin values, the admin login fails closed.
-
-## Deployment and security boundaries
-
-- Vercel and Netlify SPA rewrites are included.
-- The public catalog can run without a backend.
-- Supabase policies in `supabase/schema.sql` must be reviewed before connecting real inventory.
-- `VITE_*` values are public browser configuration; never place a service-role key or private secret in them.
-- WhatsApp handoff leaves the application and must be reviewed before using a real business number.
-
-## Repository relationship
-
-The application source began as a content-identical public/private duplicate. This public copy is being promoted as the recruiter-facing canonical repository so portfolio links never require authentication. The private duplicate is not deleted or archived by this release.
+See [PROJECT_COMPLETION_REPORT.md](PROJECT_COMPLETION_REPORT.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [SECURITY.md](SECURITY.md), and [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for the verified scope.
 
 ## License status
 
-No license file is currently present. All rights remain with the copyright holder unless an ownership-informed license is added manually.
+No license file is present. All rights remain with the copyright holder unless an ownership-informed license is added manually.

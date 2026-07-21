@@ -1,8 +1,7 @@
 import { ArrowRight, MessageCircleMore } from 'lucide-react';
-import { buildWhatsAppLink } from '../lib/whatsapp';
+import WhatsAppAction from './WhatsAppAction';
 
-const fallbackHeroImage =
-  'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1600&q=80';
+const fallbackHeroImage = '/products/washed-black-cargo.jpg';
 
 export default function HeroSection({ heroImage, whatsappNumber }) {
   return (
@@ -11,7 +10,7 @@ export default function HeroSection({ heroImage, whatsappNumber }) {
         <div className="relative min-h-[76vh]">
           <img
             src={heroImage}
-            alt="Male model wearing a streetwear fit"
+            alt="Model wearing a red graphic tee and dark jacket"
             className="absolute inset-0 h-full w-full object-cover object-center"
             onError={(event) => {
               event.currentTarget.onerror = null;
@@ -24,8 +23,8 @@ export default function HeroSection({ heroImage, whatsappNumber }) {
           <div className="relative z-10 flex h-full min-h-[76vh] flex-col justify-between px-6 py-8 md:px-10 md:py-10 xl:px-14 xl:py-14">
             <div className="flex flex-wrap gap-3 text-[10px] font-semibold uppercase tracking-[0.32em] text-stone">
               <span className="border border-white/12 px-4 py-2">Hyderabad Based</span>
-              <span className="border border-white/12 px-4 py-2">Only Limited Pieces Available</span>
-              <span className="border border-moss/30 px-4 py-2 text-[#c8d2c0]">Order via WhatsApp</span>
+              <span className="border border-white/12 px-4 py-2">Synthetic single-unit catalog</span>
+              <span className="border border-moss/30 px-4 py-2 text-[#c8d2c0]">Safe order preview</span>
             </div>
 
             <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
@@ -55,18 +54,15 @@ export default function HeroSection({ heroImage, whatsappNumber }) {
                       className="transition duration-300 group-hover:translate-x-1"
                     />
                   </a>
-                  <a
-                    href={buildWhatsAppLink(
-                      whatsappNumber,
-                      'Hi, I want to browse the latest HYD VNTG drops.',
-                    )}
+                  <WhatsAppAction
+                    whatsappNumber={whatsappNumber}
+                    message="Hi, I want to browse the latest HYD VNTG drops."
                     className="button-secondary gap-2 border-[#25D366]/30 text-[#98d4aa] hover:border-[#25D366]/45 hover:bg-[#25D366]/[0.05] hover:text-[#c1edd0]"
-                    target="_blank"
-                    rel="noreferrer"
+                    disabledChildren={<><MessageCircleMore size={15} strokeWidth={1.8} /> WhatsApp not configured</>}
                   >
                     <MessageCircleMore size={15} strokeWidth={1.8} />
                     Order via WhatsApp
-                  </a>
+                  </WhatsAppAction>
                 </div>
               </div>
 
@@ -82,11 +78,11 @@ export default function HeroSection({ heroImage, whatsappNumber }) {
                 <div className="mt-6 grid gap-4 border-t border-white/8 pt-5 text-sm text-stone">
                   <div className="flex items-start justify-between gap-4">
                     <span>Inventory style</span>
-                    <span className="font-semibold uppercase tracking-[0.2em] text-ink">Single units</span>
+                    <span className="font-semibold uppercase tracking-[0.2em] text-ink">Synthetic units</span>
                   </div>
                   <div className="flex items-start justify-between gap-4">
                     <span>Customer flow</span>
-                    <span className="font-semibold uppercase tracking-[0.2em] text-ink">WhatsApp direct</span>
+                    <span className="font-semibold uppercase tracking-[0.2em] text-ink">Local preview</span>
                   </div>
                   <div className="flex items-start justify-between gap-4">
                     <span>Base</span>

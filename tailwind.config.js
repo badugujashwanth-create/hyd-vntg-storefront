@@ -12,8 +12,8 @@ export default {
         moss: 'var(--color-moss)',
       },
       fontFamily: {
-        display: ['Archivo', 'sans-serif'],
-        sans: ['Manrope', 'sans-serif'],
+        display: ['Arial Black', 'Arial', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         velvet: '0 24px 70px rgba(0, 0, 0, 0.32)',

@@ -13,6 +13,7 @@ import AdminDashboard from './components/AdminDashboard';
 import { aboutCopy, brand, featuredDropIds, heroImage, navigation, seedProducts } from './data/catalog';
 import {
   deleteProductRecord,
+  getAdminAccessMode,
   getAdminSession,
   loadProducts,
   loginAdmin,
@@ -21,7 +22,8 @@ import {
   upsertProduct,
 } from './lib/product-store';
 
-const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '919999999999';
+const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() || '';
+const adminAccessMode = getAdminAccessMode();
 
 export default function App() {
   const isAdminRoute = window.location.pathname.startsWith('/admin');
@@ -123,6 +125,8 @@ export default function App() {
       setFlashMessage(
         `${draft.id ? 'Updated' : 'Added'} ${result.product.name}.${result.note ? ` ${result.note}` : ''}`,
       );
+    } catch (error) {
+      setFlashMessage(`Product was not saved. ${error.message || 'Unknown error.'}`);
     } finally {
       setBusyAction('');
     }
@@ -136,6 +140,8 @@ export default function App() {
       const result = await deleteProductRecord(productId);
       await refreshProducts();
       setFlashMessage(`Deleted product.${result.note ? ` ${result.note}` : ''}`);
+    } catch (error) {
+      setFlashMessage(`Product was not deleted. ${error.message || 'Unknown error.'}`);
     } finally {
       setBusyAction('');
     }
@@ -151,6 +157,8 @@ export default function App() {
       setFlashMessage(
         `${result.product.name} is now ${result.product.stock > 0 ? 'in stock' : 'sold out'}.${result.note ? ` ${result.note}` : ''}`,
       );
+    } catch (error) {
+      setFlashMessage(`Stock was not changed. ${error.message || 'Unknown error.'}`);
     } finally {
       setBusyAction('');
     }
@@ -189,6 +197,7 @@ export default function App() {
             onSubmit={handleAdminLogin}
             submitting={busyAction === 'login'}
             error={authError}
+            accessMode={adminAccessMode}
           />
         )}
       </div>

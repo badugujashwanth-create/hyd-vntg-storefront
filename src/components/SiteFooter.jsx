@@ -1,5 +1,5 @@
 import { ArrowUpRight, Instagram, MessageCircleMore } from 'lucide-react';
-import { buildWhatsAppLink } from '../lib/whatsapp';
+import WhatsAppAction from './WhatsAppAction';
 
 const footerLinks = [
   { label: 'Drops', href: '/#drops' },
@@ -36,27 +36,24 @@ export default function SiteFooter({ instagramUrl, instagramHandle, whatsappNumb
           </div>
 
           <div className="flex items-center gap-3">
-            <a
-              href={instagramUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Instagram"
+            {instagramUrl ? (
+              <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-11 w-11 place-items-center border border-white/10 bg-transparent text-ink transition hover:-translate-y-0.5 hover:bg-white/[0.04]">
+                <Instagram size={18} strokeWidth={1.6} />
+              </a>
+            ) : (
+              <span aria-label="Instagram unavailable" aria-disabled="true" title="Instagram is not configured in this prototype." className="grid h-11 w-11 place-items-center border border-white/10 bg-transparent text-stone opacity-60">
+                <Instagram size={18} strokeWidth={1.6} />
+              </span>
+            )}
+            <WhatsAppAction
+              whatsappNumber={whatsappNumber}
+              message="Hi, I want to connect about the latest HYD VNTG pieces."
+              ariaLabel="WhatsApp"
               className="grid h-11 w-11 place-items-center border border-white/10 bg-transparent text-ink transition hover:-translate-y-0.5 hover:bg-white/[0.04]"
-            >
-              <Instagram size={18} strokeWidth={1.6} />
-            </a>
-            <a
-              href={buildWhatsAppLink(
-                whatsappNumber,
-                'Hi, I want to connect about the latest HYD VNTG pieces.',
-              )}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="WhatsApp"
-              className="grid h-11 w-11 place-items-center border border-white/10 bg-transparent text-ink transition hover:-translate-y-0.5 hover:bg-white/[0.04]"
+              disabledChildren={<MessageCircleMore size={18} strokeWidth={1.6} />}
             >
               <MessageCircleMore size={18} strokeWidth={1.6} />
-            </a>
+            </WhatsAppAction>
             <a
               href="/admin"
               aria-label="Admin dashboard"

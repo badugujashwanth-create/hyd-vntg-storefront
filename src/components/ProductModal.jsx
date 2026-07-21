@@ -1,8 +1,13 @@
 import { X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sizeOptions } from '../data/catalog';
 import { getStockLabel, isSoldOut } from '../lib/product-store';
-import { formatPrice, openWhatsAppOrder } from '../lib/whatsapp';
+import {
+  buildProductOrderMessage,
+  formatPrice,
+  isWhatsAppConfigured,
+  openWhatsAppOrder,
+} from '../lib/whatsapp';
 
 const emptyOrder = {
   size: 'M',
@@ -13,6 +18,8 @@ const emptyOrder = {
 
 export default function ProductModal({ product, whatsappNumber, onClose }) {
   const [order, setOrder] = useState(emptyOrder);
+  const [messagePreview, setMessagePreview] = useState('');
+  const closeButtonRef = useRef(null);
 
   useEffect(() => {
     if (!product) {
@@ -20,6 +27,7 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
     }
 
     setOrder(emptyOrder);
+    setMessagePreview('');
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -30,6 +38,7 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
     }
 
     window.addEventListener('keydown', handleEscape);
+    window.requestAnimationFrame(() => closeButtonRef.current?.focus());
 
     return () => {
       document.body.style.overflow = previousOverflow;
@@ -42,6 +51,7 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
   }
 
   const soldOut = isSoldOut(product.stock);
+  const whatsappConfigured = isWhatsAppConfigured(whatsappNumber);
 
   function updateField(field, value) {
     setOrder((current) => ({
@@ -57,14 +67,21 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
       return;
     }
 
-    openWhatsAppOrder(whatsappNumber, product, order);
-    onClose();
+    if (!whatsappConfigured) {
+      setMessagePreview(buildProductOrderMessage(product, order));
+      return;
+    }
+
+    if (openWhatsAppOrder(whatsappNumber, product, order)) {
+      onClose();
+    }
   }
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 px-4 py-8 backdrop-blur-sm">
-      <div className="panel-surface relative w-full max-w-4xl overflow-hidden">
+      <div className="panel-surface relative max-h-[calc(100vh-2rem)] w-full max-w-4xl overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={onClose}
           aria-label="Close order form"
@@ -80,7 +97,7 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
 
           <div className="p-6 md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone">Order Form</p>
-            <h2 className="mt-4 font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black uppercase leading-[0.92] tracking-[-0.05em] text-ink">
+            <h2 id="product-modal-title" className="mt-4 font-display text-[clamp(2.2rem,4vw,3.4rem)] font-black uppercase leading-[0.92] tracking-[-0.05em] text-ink">
               {product.name}
             </h2>
             <div className="mt-4 flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.2em] text-stone">
@@ -88,9 +105,15 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
               <span>{getStockLabel(product.stock)}</span>
             </div>
             <p className="mt-4 max-w-xl text-sm leading-7 text-stone">
-              Select size, add delivery details, and the site will generate a ready-to-send
-              WhatsApp order message.
+              Select size and add synthetic delivery details to generate an order-message preview.
+              A configured destination is required before anything can leave this site.
             </p>
+
+            {!whatsappConfigured && (
+              <p className="mt-4 border border-moss/30 bg-moss/10 px-4 py-3 text-sm text-[#dbe6d2]">
+                Demo boundary: WhatsApp is not configured. Submitting previews the message locally and opens no external site.
+              </p>
+            )}
 
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
               <div>
@@ -105,6 +128,7 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
                       <button
                         key={size}
                         type="button"
+                        aria-pressed={active}
                         onClick={() => updateField('size', size)}
                         className={`border px-4 py-3 text-xs font-semibold uppercase tracking-[0.28em] transition ${
                           active
@@ -146,6 +170,9 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
                   </label>
                   <input
                     id="customer-phone"
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]{10,15}"
                     className="form-field"
                     value={order.phone}
                     onChange={(event) => updateField('phone', event.target.value)}
@@ -178,12 +205,21 @@ export default function ProductModal({ product, whatsappNumber, onClose }) {
                   disabled={soldOut}
                   className="button-primary disabled:cursor-not-allowed disabled:border-white/10 disabled:text-stone"
                 >
-                  {soldOut ? 'Sold Out' : 'Send to WhatsApp'}
+                  {soldOut ? 'Sold Out' : whatsappConfigured ? 'Send to WhatsApp' : 'Preview Order Message'}
                 </button>
                 <button type="button" onClick={onClose} className="button-secondary">
                   Cancel
                 </button>
               </div>
+
+              {messagePreview && (
+                <div className="border border-moss/30 bg-black/25 p-4" role="status" aria-live="polite">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c5d0bc]">
+                    Local message preview — not sent
+                  </p>
+                  <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-7 text-stone">{messagePreview}</pre>
+                </div>
+              )}
             </form>
           </div>
         </div>

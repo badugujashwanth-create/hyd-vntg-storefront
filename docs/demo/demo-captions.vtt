@@ -1,16 +1,22 @@
 WEBVTT
 
-00:00.000 --> 00:05.000
-HYD VNTG Storefront
+00:00.000 --> 00:22.000
+HYD VNTG is a responsive storefront prototype with synthetic inventory, local product assets, and no payment or production-order backend.
 
-00:05.000 --> 00:15.000
-The problem, intended user, and starting point.
+00:22.000 --> 00:45.000
+Featured items, category filters, prices, and stock labels use deterministic demo fixtures rather than real offers for sale.
 
-00:15.000 --> 00:38.000
-A walkthrough of the primary workflow using safe demonstration data.
+00:45.000 --> 01:12.000
+The Black 705 Tee opens in a labeled, keyboard-friendly dialog. Size and synthetic buyer details stay in component memory and are not intentionally stored.
 
-00:38.000 --> 00:50.000
-Architecture, technology boundaries, and verified behavior.
+01:12.000 --> 01:35.000
+With no WhatsApp destination configured, submitting creates a complete local message preview labeled not sent. No popup or placeholder contact opens.
 
-00:50.000 --> 00:58.000
-Current status, known limitation, and repository owner badugujashwanth-create.
+01:35.000 --> 02:08.000
+Admin access is disabled by default. Local-demo credentials cannot protect real data; Supabase mode requires a server-assigned admin role and matching row-level policies.
+
+02:08.000 --> 02:35.000
+Tests cover handoff rules, catalog transitions, session rejection, admin roles, policy structure, desktop order preview, rejected admin login, and mobile overflow.
+
+02:35.000 --> 03:02.300
+The verified claim is a responsive, deterministic catalog and safe order-preparation workflow—not a live store. The public repository is canonical; the private duplicate is untouched.

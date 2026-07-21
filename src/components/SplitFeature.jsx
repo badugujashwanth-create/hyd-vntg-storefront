@@ -1,13 +1,13 @@
 import { ArrowRight } from 'lucide-react';
 import Reveal from './Reveal';
-import { buildWhatsAppLink } from '../lib/whatsapp';
+import WhatsAppAction from './WhatsAppAction';
 
 export default function SplitFeature({ aboutCopy, image, whatsappNumber }) {
   return (
     <section id="about" className="section-shell pt-10 pb-40 md:pt-16 md:pb-52">
       <div className="grid items-center gap-12 border border-white/8 bg-mist p-6 shadow-velvet md:p-10 lg:grid-cols-[0.94fr_1.06fr] lg:gap-16 xl:p-14">
         <Reveal className="lg:translate-y-6">
-          <img src={image} alt="Male model in a black jacket" loading="lazy" className="aspect-[4/5] w-full object-cover" />
+          <img src={image} alt="Chambray button-down product fixture" loading="lazy" className="aspect-[4/5] w-full object-cover" />
         </Reveal>
 
         <Reveal className="max-w-2xl" delay={120}>
@@ -28,18 +28,15 @@ export default function SplitFeature({ aboutCopy, image, whatsappNumber }) {
             </div>
           </div>
 
-          <a
-            href={buildWhatsAppLink(
-              whatsappNumber,
-              'Hi, I want recommendations from the current HYD VNTG drop.',
-            )}
-            target="_blank"
-            rel="noreferrer"
+          <WhatsAppAction
+            whatsappNumber={whatsappNumber}
+            message="Hi, I want recommendations from the current HYD VNTG drop."
             className="button-primary mt-8 gap-2"
+            disabledChildren={<>WhatsApp not configured <ArrowRight size={15} strokeWidth={1.7} /></>}
           >
             Ask About Pieces
             <ArrowRight size={15} strokeWidth={1.7} />
-          </a>
+          </WhatsAppAction>
         </Reveal>
       </div>
     </section>
