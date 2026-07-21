@@ -42,4 +42,4 @@ The first browser-gate attempt found a stale local Vite preview holding port 417
 | Desktop playback | Pass | Public MP4 ready state 4, 183.12 s; 1280x720 poster decoded; 7 caption cues showing |
 | Mobile playback | Pass | Public MP4 ready state 4, 183.12 s; 1280x720 poster decoded; 7 caption cues showing |
 
-GitHub intentionally returns release downloads as attachments and raw video content with a generic wire type even though the release API stores `video/mp4` and `video/webm`. Playback was tested in Chromium rather than assumed from the header. Native browser MIME delivery remains a portfolio synchronization requirement.
+GitHub intentionally returns release downloads as attachments and raw video content with a generic wire type even though the release API stores `video/mp4` and `video/webm`. Playback was tested in Chromium rather than assumed from the header. The synchronized portfolio now supplies native browser MIME delivery; logged-out desktop and mobile checks passed at 183.12 seconds with all seven caption cues.
