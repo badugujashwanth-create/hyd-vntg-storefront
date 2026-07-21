@@ -1,29 +1,39 @@
 # Development guide
 
-## Purpose
+## Install and run
 
-Public duplicate of the HYD VNTG React storefront, including its catalog, optional Supabase admin flow, and WhatsApp handoff.
-
-## Prerequisites
-
-React, Vite, Tailwind CSS, Supabase, WhatsApp deep links.
-
-## Install
+Node.js 22 is the CI baseline.
 
 ```powershell
 npm ci
-```
-
-## Run
-
-```powershell
 npm run dev
 ```
 
-## Verify
+The default application uses local synthetic fixtures and intentionally disables outbound and admin actions.
 
-- Tests: `No automated test command is configured`
-- Build: `npm run build`
+## Targeted checks
 
-See [TEST_REPORT.md](TEST_REPORT.md) for the latest audited results. Copy example environment files instead of committing real values. Generated dependencies, caches, logs, databases, and build output must remain untracked.
+After editing handoff, catalog, session, or schema rules:
 
+```powershell
+npm test -- tests/unit/whatsapp.test.js
+npm test -- tests/unit/product-store.test.js
+npm test -- tests/unit/schema.test.js
+```
+
+After editing a browser workflow:
+
+```powershell
+npx playwright test --grep "relevant test title"
+```
+
+Before release:
+
+```powershell
+npm test
+npm run build
+npm run test:e2e
+npm audit --audit-level=low
+```
+
+Copy `.env.example` only for explicit integration work. Use synthetic values and do not commit `.env`, generated dependencies, browser artifacts, caches, or build output.

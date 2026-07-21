@@ -12,7 +12,7 @@ export default function ProductCard({ product, onOrder, imageClassName = 'aspect
           loading="lazy"
           className={`${imageClassName} w-full object-cover transition duration-700 group-hover:scale-105`}
         />
-        <div className="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/80 via-black/8 to-transparent p-5 opacity-0 transition duration-300 group-hover:opacity-100">
+        <div className="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/80 via-black/8 to-transparent p-5 opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
           <span className="border border-white/15 bg-black/35 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-white">
             {product.category}
           </span>

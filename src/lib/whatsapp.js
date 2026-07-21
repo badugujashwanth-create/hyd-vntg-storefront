@@ -4,8 +4,18 @@ export function formatPrice(price) {
   return `₹${indianPriceFormatter.format(Number(price) || 0)}`;
 }
 
+export function normalizeWhatsAppNumber(number) {
+  const normalized = String(number || '').replace(/\D/g, '');
+  return /^\d{10,15}$/.test(normalized) ? normalized : '';
+}
+
+export function isWhatsAppConfigured(number) {
+  return Boolean(normalizeWhatsAppNumber(number));
+}
+
 export function buildWhatsAppLink(number, message) {
-  const cleanNumber = String(number).replace(/\D/g, '');
+  const cleanNumber = normalizeWhatsAppNumber(number);
+  if (!cleanNumber) return null;
   return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
 }
 
@@ -24,6 +34,8 @@ export function buildProductOrderMessage(product, customer) {
 }
 
 export function openWhatsAppOrder(number, product, customer) {
-  const message = buildProductOrderMessage(product, customer);
-  window.open(buildWhatsAppLink(number, message), '_blank', 'noopener,noreferrer');
+  const link = buildWhatsAppLink(number, buildProductOrderMessage(product, customer));
+  if (!link) return false;
+  window.open(link, '_blank', 'noopener,noreferrer');
+  return true;
 }

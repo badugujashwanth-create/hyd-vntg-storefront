@@ -1,6 +1,6 @@
 import { Instagram, Menu, MessageCircleMore, Shield, X } from 'lucide-react';
 import { useState } from 'react';
-import { buildWhatsAppLink } from '../lib/whatsapp';
+import WhatsAppAction from './WhatsAppAction';
 
 export default function Navbar({ navigation, whatsappNumber }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,26 +29,22 @@ export default function Navbar({ navigation, whatsappNumber }) {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <a
-            href={buildWhatsAppLink(
-              whatsappNumber,
-              'Hi, I want to order from the current HYD VNTG collection.',
-            )}
+          <WhatsAppAction
+            whatsappNumber={whatsappNumber}
+            message="Hi, I want to order from the current HYD VNTG collection."
             className="hidden border border-moss/55 bg-transparent px-5 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[#c6d2bb] transition hover:-translate-y-0.5 hover:bg-moss/10 md:inline-flex"
-            target="_blank"
-            rel="noreferrer"
+            disabledChildren="WhatsApp unavailable"
           >
             Order via WhatsApp
-          </a>
-          <a
-            href="https://www.instagram.com"
+          </WhatsAppAction>
+          <span
             aria-label="Instagram"
+            aria-disabled="true"
+            title="Instagram is not configured in this prototype."
             className="grid h-11 w-11 place-items-center border border-white/10 bg-transparent transition hover:-translate-y-0.5 hover:bg-white/[0.04]"
-            target="_blank"
-            rel="noreferrer"
           >
             <Instagram size={18} strokeWidth={1.5} />
-          </a>
+          </span>
           <a
             href="/admin"
             aria-label="Admin"
@@ -60,6 +56,7 @@ export default function Navbar({ navigation, whatsappNumber }) {
             type="button"
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMobileMenuOpen((open) => !open)}
             className="grid h-11 w-11 place-items-center border border-white/10 bg-transparent transition hover:-translate-y-0.5 hover:bg-white/[0.04] md:hidden"
           >
@@ -69,7 +66,7 @@ export default function Navbar({ navigation, whatsappNumber }) {
       </div>
 
       {mobileMenuOpen && (
-        <div className="border-t border-white/8 bg-black/45 px-6 py-5 backdrop-blur-xl md:hidden">
+        <div id="mobile-navigation" className="border-t border-white/8 bg-black/45 px-6 py-5 backdrop-blur-xl md:hidden">
           <nav className="flex flex-col gap-4 text-sm text-stone">
             {navigation.map((link) => (
               <a
@@ -88,18 +85,15 @@ export default function Navbar({ navigation, whatsappNumber }) {
             >
               Admin Dashboard
             </a>
-            <a
-              href={buildWhatsAppLink(
-                whatsappNumber,
-                'Hi, I want to order from the current HYD VNTG collection.',
-              )}
-              target="_blank"
-              rel="noreferrer"
+            <WhatsAppAction
+              whatsappNumber={whatsappNumber}
+              message="Hi, I want to order from the current HYD VNTG collection."
               className="button-primary mt-2 gap-2"
+              disabledChildren={<><MessageCircleMore size={15} strokeWidth={1.7} /> WhatsApp unavailable</>}
             >
               <MessageCircleMore size={15} strokeWidth={1.7} />
               Order via WhatsApp
-            </a>
+            </WhatsAppAction>
           </nav>
         </div>
       )}

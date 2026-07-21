@@ -10,6 +10,16 @@ function hasWindow() {
   return typeof window !== 'undefined';
 }
 
+export function isSupabaseAdmin(user) {
+  return user?.app_metadata?.role === 'admin';
+}
+
+export function getAdminAccessMode() {
+  if (hasSupabase) return 'supabase';
+  if (LOCAL_ADMIN_EMAIL && LOCAL_ADMIN_PASSWORD) return 'local-demo';
+  return 'disabled';
+}
+
 function slugify(value) {
   return String(value)
     .toLowerCase()
@@ -139,22 +149,36 @@ export async function getAdminSession() {
   if (hasSupabase) {
     const { data } = await supabase.auth.getSession();
 
-    if (data.session?.user) {
+    if (data.session?.user && isSupabaseAdmin(data.session.user)) {
       return {
         email: data.session.user.email,
         mode: 'supabase',
       };
     }
+
+    if (data.session?.user) await supabase.auth.signOut();
+    return null;
   }
 
   if (!hasWindow()) {
     return null;
   }
 
+  if (!LOCAL_ADMIN_EMAIL || !LOCAL_ADMIN_PASSWORD) {
+    window.localStorage.removeItem(SESSION_KEY);
+    return null;
+  }
+
   try {
     const raw = window.localStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
+    const session = raw ? JSON.parse(raw) : null;
+    if (session?.mode === 'local' && session.email === LOCAL_ADMIN_EMAIL) {
+      return session;
+    }
+    window.localStorage.removeItem(SESSION_KEY);
+    return null;
   } catch {
+    window.localStorage.removeItem(SESSION_KEY);
     return null;
   }
 }
@@ -165,6 +189,11 @@ export async function loginAdmin({ email, password }) {
 
     if (error) {
       throw new Error(error.message);
+    }
+
+    if (!isSupabaseAdmin(data.user)) {
+      await supabase.auth.signOut();
+      throw new Error('This account is not authorized for inventory administration.');
     }
 
     return {
@@ -230,12 +259,11 @@ export async function upsertProduct(draft) {
 
     const { data, error } = await query;
 
-    if (!error) {
-      return {
-        product: normalizeProduct(data),
-        mode: 'supabase',
-      };
-    }
+    if (error) throw new Error(`Supabase product write failed: ${error.message}`);
+    return {
+      product: normalizeProduct(data),
+      mode: 'supabase',
+    };
   }
 
   return {
@@ -251,10 +279,8 @@ export async function upsertProduct(draft) {
 export async function deleteProductRecord(productId) {
   if (hasSupabase) {
     const { error } = await supabase.from('products').delete().eq('id', productId);
-
-    if (!error) {
-      return { mode: 'supabase' };
-    }
+    if (error) throw new Error(`Supabase product delete failed: ${error.message}`);
+    return { mode: 'supabase' };
   }
 
   const next = readLocalProducts().filter((product) => product.id !== productId);

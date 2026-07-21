@@ -111,7 +111,9 @@ export default function AdminDashboard({
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone">Inventory Mode</p>
           <p className="mt-4 font-display text-3xl font-black uppercase text-ink">{inventoryMode}</p>
           <p className="mt-3 text-sm leading-7 text-stone">
-            {inventoryNotice || 'Live product reads and writes are active.'}
+            {inventoryNotice || (inventoryMode === 'supabase'
+              ? 'Supabase reads and writes are active; row-level policies remain authoritative.'
+              : 'Browser-only demo inventory. Changes remain on this device.')}
           </p>
         </div>
       </div>
@@ -193,12 +195,12 @@ export default function AdminDashboard({
               <label className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.26em] text-stone">
                 Image URL
               </label>
-              <input
-                type="url"
+                <input
+                  type="text"
                 className="form-field"
                 value={draft.image}
                 onChange={(event) => updateDraft('image', event.target.value)}
-                placeholder="https://images.unsplash.com/..."
+                  placeholder="/products/example.jpg"
                 required
               />
             </div>

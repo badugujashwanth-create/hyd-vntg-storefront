@@ -13,27 +13,35 @@ create table if not exists public.products (
 
 alter table public.products enable row level security;
 
-create policy if not exists "Public can view products"
+drop policy if exists "Public can view products" on public.products;
+drop policy if exists "Authenticated users can insert products" on public.products;
+drop policy if exists "Authenticated users can update products" on public.products;
+drop policy if exists "Authenticated users can delete products" on public.products;
+drop policy if exists "Admins can insert products" on public.products;
+drop policy if exists "Admins can update products" on public.products;
+drop policy if exists "Admins can delete products" on public.products;
+
+create policy "Public can view products"
 on public.products
 for select
 to public
 using (true);
 
-create policy if not exists "Authenticated users can insert products"
+create policy "Admins can insert products"
 on public.products
 for insert
 to authenticated
-with check (true);
+with check ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
-create policy if not exists "Authenticated users can update products"
+create policy "Admins can update products"
 on public.products
 for update
 to authenticated
-using (true)
-with check (true);
+using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
+with check ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
-create policy if not exists "Authenticated users can delete products"
+create policy "Admins can delete products"
 on public.products
 for delete
 to authenticated
-using (true);
+using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
