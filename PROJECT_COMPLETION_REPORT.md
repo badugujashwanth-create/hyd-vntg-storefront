@@ -2,7 +2,7 @@
 
 ## Status
 
-**Release candidate on `phase3-hyd-vntg-completion`.** Implementation and replacement media are complete locally. CI, merge, release publication, logged-out asset checks, and portfolio synchronization remain pending.
+**Repository release verified.** PR [#2](https://github.com/badugujashwanth-create/hyd-vntg-storefront/pull/2) passed CI and merged as `3aff4b0`; [v1.0.0](https://github.com/badugujashwanth-create/hyd-vntg-storefront/releases/tag/v1.0.0) is public with checksum-verified media. Portfolio synchronization remains the final cross-repository step.
 
 ## Ground truth
 
@@ -67,12 +67,17 @@
 
 Sampled frames were inspected after rendering. They contain only synthetic buyer/admin values, show no secrets, and visibly preserve the local-preview and disabled-provider boundaries.
 
-### Pending public coordination
+### Public release verification
 
-- Require green GitHub CI before merge.
-- Publish the tagged release with MP4, WebM, captions, and poster assets.
-- Verify repository and release assets logged out with HTTP 200 and correct MIME types.
-- Synchronize the verified release, media, duration, claims, and limitations into the portfolio.
+- PR #2 passed the `Storefront CI / verify` job on release-candidate SHA `75dcfd8` and merged without an unresolved review gate.
+- The release page, four attached assets, and this report return HTTP 200 without authentication.
+- GitHub's release API records the assets as `video/mp4`, `video/webm`, `text/vtt; charset=utf-8`, and `image/png`, with sizes and SHA-256 digests matching the local release files.
+- Logged-out desktop and mobile Chromium both loaded the public MP4 to ready state 4 at 183.12 seconds, decoded the 1280x720 poster, and loaded all seven WebVTT cues in showing mode.
+- GitHub serves release downloads as attachment responses and raw video bytes as `application/octet-stream`; browser playback was therefore verified directly instead of inferring it from the CDN header. The portfolio is the browser-first delivery surface and must serve native media MIME types.
+
+### Remaining coordination
+
+- Synchronize the verified release, media, duration, claims, limitations, and browser-first MIME delivery into the portfolio.
 
 ### Final local gate
 

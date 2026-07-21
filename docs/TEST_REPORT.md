@@ -31,6 +31,15 @@ Branch: `phase3-hyd-vntg-completion`
 
 The first browser-gate attempt found a stale local Vite preview holding port 4173. The exact repository-owned process was identified and stopped; the browser suite then passed without repeating the already-green unit/build checks.
 
-## Public gates still pending
+## Public release gate
 
-GitHub CI, merge, tagged release assets, logged-out HTTP/MIME/playback verification, and portfolio synchronization require the release candidate to be published first. They are not represented as complete in this branch report.
+| Check | Result | Evidence |
+|---|---|---|
+| Pull request | Pass | PR #2 merged as `3aff4b0` after `Storefront CI / verify` passed on `75dcfd8` |
+| Release | Pass | Public v1.0.0 includes MP4, WebM, WebVTT, and PNG assets |
+| Asset identity | Pass | Release API sizes, media metadata, and SHA-256 digests match the reviewed local files |
+| Logged-out HTTP | Pass | Release page, four assets, and completion report return HTTP 200 |
+| Desktop playback | Pass | Public MP4 ready state 4, 183.12 s; 1280x720 poster decoded; 7 caption cues showing |
+| Mobile playback | Pass | Public MP4 ready state 4, 183.12 s; 1280x720 poster decoded; 7 caption cues showing |
+
+GitHub intentionally returns release downloads as attachments and raw video content with a generic wire type even though the release API stores `video/mp4` and `video/webm`. Playback was tested in Chromium rather than assumed from the header. Native browser MIME delivery remains a portfolio synchronization requirement.

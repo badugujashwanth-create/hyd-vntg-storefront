@@ -1,10 +1,12 @@
 # HYD VNTG Storefront
 
-> **Release candidate:** a responsive storefront prototype with deterministic synthetic inventory, a local order-message preview, and fail-closed external/admin boundaries.
+> **Released as [v1.0.0](https://github.com/badugujashwanth-create/hyd-vntg-storefront/releases/tag/v1.0.0):** a responsive storefront prototype with deterministic synthetic inventory, a local order-message preview, and fail-closed external/admin boundaries.
 
 [![Watch the 3:03 narrated HYD VNTG walkthrough](docs/demo/demo-thumbnail.png)](docs/demo/demo.mp4)
 
 [Play MP4](docs/demo/demo.mp4) · [Download WebM](docs/demo/demo.webm) · [Captions](docs/demo/demo-captions.vtt) · [Portfolio case study](https://jashwanth-portfolio-ten.vercel.app/work/hyd-vntg-storefront/)
+
+Checksum-verified downloadable copies are attached to the [v1.0.0 release](https://github.com/badugujashwanth-create/hyd-vntg-storefront/releases/tag/v1.0.0).
 
 The 3:03 narrated walkthrough is a real browser recording of the verified workflow. It shows the synthetic catalog, responsive filtering, the local order-message preview with zero outbound popups, the fail-closed admin boundary, and the product limitations.
 
