@@ -2,7 +2,7 @@
 
 ## Status
 
-**Repository release verified.** PR [#2](https://github.com/badugujashwanth-create/hyd-vntg-storefront/pull/2) passed CI and merged as `3aff4b0`; [v1.0.0](https://github.com/badugujashwanth-create/hyd-vntg-storefront/releases/tag/v1.0.0) is public with checksum-verified media. Portfolio synchronization remains the final cross-repository step.
+**Complete.** PR [#2](https://github.com/badugujashwanth-create/hyd-vntg-storefront/pull/2) passed CI and merged as `3aff4b0`; [v1.0.0](https://github.com/badugujashwanth-create/hyd-vntg-storefront/releases/tag/v1.0.0) is public with checksum-verified media. Portfolio media and claims were synchronized in [portfolio PR #9](https://github.com/badugujashwanth-create/jashwanth-portfolio/pull/9), and production verification closed in [portfolio PR #10](https://github.com/badugujashwanth-create/jashwanth-portfolio/pull/10).
 
 ## Ground truth
 
@@ -75,9 +75,10 @@ Sampled frames were inspected after rendering. They contain only synthetic buyer
 - Logged-out desktop and mobile Chromium both loaded the public MP4 to ready state 4 at 183.12 seconds, decoded the 1280x720 poster, and loaded all seven WebVTT cues in showing mode.
 - GitHub serves release downloads as attachment responses and raw video bytes as `application/octet-stream`; browser playback was therefore verified directly instead of inferring it from the CDN header. The portfolio is the browser-first delivery surface and must serve native media MIME types.
 
-### Remaining coordination
+### Portfolio synchronization
 
-- Synchronize the verified release, media, duration, claims, limitations, and browser-first MIME delivery into the portfolio.
+- Portfolio commit `097f859` publishes the verified release facts and same-origin MP4, WebM, captions, and poster.
+- Portfolio audit commit `646120b` records HTTP 200, native media MIME, 183.12-second playback, seven captions, and viewport-safe logged-out desktop/mobile delivery.
 
 ### Final local gate
 
